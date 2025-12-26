@@ -3,6 +3,10 @@ run = "run = \"echo 'Hello, Replit!'\""
 
 [nix]
 channel = "stable-24_05"
+packages = ["cairo", "ffmpeg-full", "freetype", "ghostscript", "glibcLocales", "gobject-introspection", "gtk3", "libGL", "libGLU", "libjpeg_turbo", "libpng", "libxcrypt", "pkg-config", "qhull", "tcl", "tk", "which", "xsimd"]
 
 [deployment]
 run = ["sh", "-c", "run = \"echo 'Hello, Replit!'\""]
+
+[agent]
+expertMode = true
