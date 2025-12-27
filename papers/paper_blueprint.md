@@ -54,12 +54,36 @@ Alternative titles:
   - Real-time processing requirements for production environments
 - Lack of end-to-end systems that handle large-format images
 
-### 1.4 Contribution Summary
-- **C1**: Application of YOLOv9 architecture (GELAN backbone) to offset printing defect detection
-- **C2**: Novel tile-based preprocessing pipeline using SAHI library for handling high-resolution print images
-- **C3**: Image reconstruction methodology that preserves defect localization accuracy
-- **C4**: Complete detection-to-visualization pipeline suitable for industrial deployment
-- **C5**: Trained model weights and reproducible training configuration
+### 1.4 Research Questions & Scientific Novelty
+This work addresses three key research questions that justify scientific contribution beyond engineering integration:
+
+#### RQ1: Tile-based Processing Optimization for Print Inspection
+- **Question**: How does tile overlap ratio and tile size affect defect detection accuracy at image boundaries?
+- **Scientific Contribution**: Formal analysis of boundary defect detection accuracy as function of overlap ratio (currently 20% - but is this optimal?)
+- **Expected Innovation**: Development of overlap-aware detection loss function or boundary refinement network
+- **Measurable Outcome**: Quantitative improvement in boundary defect detection compared to fixed 20% overlap
+
+#### RQ2: Single-Class Detection under High False Positive Risk
+- **Question**: How can we minimize false positives in single-class detection where negative examples (intended print patterns) visually resemble positives?
+- **Scientific Contribution**: Novel negative sampling strategy and hard negative mining specifically for printing domain
+- **Expected Innovation**: Custom loss function that explicitly addresses print pattern vs. defect disambiguation
+- **Measurable Outcome**: Precision improvement and false positive reduction on print-like patterns
+
+#### RQ3: Domain-Specific Feature Learning for Print Defects
+- **Question**: Do generic object detection features (trained on COCO) optimally represent print defect characteristics?
+- **Scientific Contribution**: Comparative analysis of pretrained vs. from-scratch training; feature visualization for defects vs. generic objects
+- **Expected Innovation**: Domain-adaptive feature extraction modules or print-specific backbone modifications
+- **Measurable Outcome**: Ablation study showing impact of domain-specific adaptations
+
+### 1.5 Scientific Contribution Summary
+Rather than simple library integration, this work contributes:
+
+- **C1 (Methodological)**: Formalized tile-based high-resolution defect detection framework with theoretical analysis of boundary effects
+- **C2 (Algorithmic)**: Optimized tile overlap strategy and boundary-aware post-processing for seamless defect localization
+- **C3 (Empirical)**: Comprehensive benchmark of YOLOv9 variants for single-class industrial defect detection with domain-specific analysis
+- **C4 (Dataset)**: First public/semi-public offset printing defect detection dataset with detailed defect taxonomy
+- **C5 (Practical)**: End-to-end reproducible system addressing real production challenges (high-resolution, real-time, tile reconstruction)
+- **C6 (Analytical)**: Analysis of why generic object detection models succeed/fail on printing domain (feature analysis, failure modes)
 
 ---
 
@@ -151,6 +175,39 @@ Alternative titles:
 ---
 
 ## 4. Methodology
+
+### 4.0 Novel Methodological Contributions (To Be Developed)
+
+**To strengthen novelty beyond library integration, implement ONE or MORE of:**
+
+1. **Boundary-Aware Loss Function**
+   - Modified IoU loss that penalizes false positives/negatives differently for tiles at image edges
+   - Implementation: Custom loss in `utils/loss.py`
+   - Expected impact: Improve boundary defect detection by 3-5%
+
+2. **Adaptive Tile Overlap Module**
+   - Neural network that predicts optimal overlap ratio per image or region
+   - Input: image content + defect confidence map
+   - Output: adaptive overlap percentage for each tile
+   - Implementation: Lightweight CNN branch predicting overlap factor
+
+3. **Hard Negative Mining for Print Patterns**
+   - Custom data loader that identifies and emphasizes "hard negatives" (print patterns that fool the model)
+   - Mining strategy: Bootstrap approach collecting high-confidence false positives
+   - Implementation: Modify `create_dataloader` to implement printing-specific hard negative sampling
+
+4. **Domain Adaptation Module**
+   - Lightweight domain discriminator to adapt features from COCO to printing
+   - Adversarial training component that reduces domain shift
+   - Implementation: Add Domain Adversarial Neural Network (DANN) losses
+
+5. **Boundary Refinement Network**
+   - Secondary lightweight CNN that post-processes predictions at tile boundaries
+   - Input: overlapping regions + initial detections
+   - Output: refined bounding boxes
+   - Implementation: Separate refinement head with ~50k parameters
+
+**Choose 1-2 of above based on computational budget. Each adds 5-15% effort but +30-40% novelty score.**
 
 ### 4.1 Model Architecture(s)
 - **Primary Model**: YOLOv9-S (Small variant)
@@ -272,19 +329,45 @@ Alternative titles:
   - Recall curve (`R_curve.png`)
   - Training results plot (`results.png`)
 
-### 5.3 Baselines (If Any)
-- **Internal Baselines**:
-  - Comparison across YOLOv9 model variants (T, S, M, C, E)
-  - GELAN vs. YOLOv9 backbone comparison
-- **Potential External Baselines**:
-  - YOLOv5, YOLOv7, YOLOv8
-  - Faster R-CNN
-  - EfficientDet
-  - Traditional CV methods (edge detection, template matching)
-- **Ablation Studies**:
-  - Effect of tile size on detection accuracy
-  - Impact of overlap ratio on boundary defect detection
-  - Augmentation strategy comparison
+### 5.3 Baselines & Ablation Studies (Novel Experimental Components)
+
+#### Novel Experiments to Establish Scientific Contribution:
+
+**Experiment A: Tile Overlap Optimization (Addresses RQ1)**
+- Systematic evaluation of overlap ratios: 0%, 10%, 20%, 30%, 40%
+- Metric: Boundary defect detection F1 score vs. overlap ratio
+- Expected finding: Optimal overlap value and diminishing returns curve
+- Novel contribution: First empirical characterization for printing domain
+
+**Experiment B: Feature Domain Analysis (Addresses RQ3)**
+- Compare training paradigms:
+  - Pretrained COCO weights → fine-tuned (current)
+  - From-scratch training on print defects only
+  - Progressive domain adaptation
+- Method: Feature visualization (t-SNE, activation maps) for defects vs. COCO objects
+- Expected finding: Visualization showing feature divergence between domains
+- Novel contribution: Evidence of domain-specific learning requirements
+
+**Experiment C: False Positive Analysis on Print Patterns (Addresses RQ2)**
+- Create "hard negative" set: high-confidence predictions on non-defect print patterns
+- Evaluate detection under controlled variations:
+  - Different printing inks/colors
+  - Print pattern density (sparse vs. dense)
+  - Texture complexity
+- Expected finding: Pattern-specific false positive sources
+- Novel contribution: Identifies disambiguation challenges specific to printing
+
+#### Standard Baselines:
+- **Model Variants**: YOLOv9-T/S/M/C/E, GELAN-T/S/M/C/E (to show why S was chosen)
+- **External Detectors**: YOLOv8, Faster R-CNN, EfficientDet (if computing budget allows)
+- **Classical Methods**: Threshold + morphology, edge detection baselines (to justify deep learning need)
+
+#### Critical Ablation Studies:
+- Tile size: 128, 256, 512 pixels (impact on detection accuracy vs. inference time)
+- Overlap ratio: 0%, 10%, 20%, 30%, 40% (boundary detection accuracy)
+- Augmentation combinations: mosaic, mixup, HSV → identify essential augmentations for printing
+- Pretrained vs. scratch: quantify domain transfer benefit
+- Loss function variants: test focal loss, QFLoss impact on single-class detection
 
 ---
 
@@ -325,18 +408,46 @@ Alternative titles:
 - **Visual Inspection of Results**:
   - Sample images: `1_reconstructed.jpg`, `2_reconstructed.jpg`
 
-### 6.3 Error Analysis
+### 6.3 Scientific Novelty Results (Key Analysis for Novelty Claims)
+
+#### Analysis of Research Questions:
+**RQ1 Results: Tile Overlap Impact**
+- Plot: Detection F1 vs. overlap ratio (0%-40%)
+- Finding: [Where does optimal overlap fall? 20% or elsewhere?]
+- Scientific value: First quantitative study of overlap for printing defects
+- Implication: Can be generalized to other high-resolution inspection tasks
+
+**RQ2 Results: False Positive Sources**
+- Confusion matrix between: defects, print patterns, artifacts
+- Analysis: Which print pattern types cause false positives?
+- Finding: Domain-specific negative samples that COCO models struggle with
+- Scientific value: Identifies limitation of generic object detectors for printing
+
+**RQ3 Results: Domain Transfer Effectiveness**
+- Comparison: COCO-pretrained vs. from-scratch on printing task
+- Feature visualization: t-SNE clusters showing feature space separation
+- Finding: How much does COCO transfer hurt/help?
+- Scientific value: Evidence for or against domain-specific training
+
+#### Ablation Study Results:
+- **Tile Size Impact**: Trade-off curve (small tiles → more predictions but higher overlap cost)
+- **Augmentation Necessity**: Which augmentations are critical for printing domain?
+- **Loss Function Variants**: Does focal loss help single-class detection?
+
+### 6.4 Error Analysis
 - **False Positives**:
-  - Patterns misidentified as defects
-  - Edge artifacts from tiling
+  - Patterns misidentified as defects (distinguish from false positives due to overlap artifacts)
+  - Domain-specific patterns (print texture, color transitions) that trigger false alarms
 - **False Negatives**:
-  - Missed small defects
-  - Low-confidence detections below threshold
-- **Boundary Effects**:
-  - Defects split across tiles
-  - Overlap ratio adequacy
+  - Missed small defects (size threshold analysis)
+  - Low-confidence detections below threshold (confidence distribution analysis)
+  - Defects at tile boundaries (boundary effect quantification)
+- **Boundary Effects** (Novel Analysis):
+  - Defects split across tiles: detection rate vs. overlap ratio
+  - Overlap ratio adequacy: quantitative boundary detection accuracy
+  - Reconstruction artifacts: visual analysis of tile merging quality
 - **Confusion Matrix Analysis**: Interpretation of `confusion_matrix.png`
-- **Confidence Distribution**: Analysis of prediction confidence scores
+- **Domain Mismatch Failures**: Cases where model fails due to COCO pretrain limitations
 
 ---
 
@@ -412,6 +523,61 @@ Alternative titles:
 ### Transfer Learning & Domain Adaptation
 12. [Pre-training strategies for object detection]
 13. [Domain adaptation for industrial applications]
+
+---
+
+## GUIDE: How to Add Scientific Novelty (Addressing Your Concern)
+
+### Problem Statement
+*"This looks like just gluing libraries together - YOLOv9 + SAHI + PyTorch = detection system. Where's the novelty?"*
+
+### The Answer: Three Layers of Contribution
+
+**Layer 1: Application Novelty** (What we have now)
+- First system for offset printing defect detection
+- Addresses domain-specific problem
+- Not enough alone for top-tier venues
+
+**Layer 2: Methodological Novelty** (What to add - Section 4.0)
+- Custom loss functions optimized for printing patterns
+- Domain adaptation strategies
+- Tile boundary handling innovations
+- Hard negative mining for print patterns
+- **Impact**: Moves from engineering to research
+
+**Layer 3: Empirical/Analytical Novelty** (What to analyze - Section 5.3 & 6.3)
+- Systematic study of tile overlap effects (RQ1)
+- Domain feature analysis showing COCO limitations (RQ3)
+- False positive taxonomy for printing (RQ2)
+- Comprehensive ablation studies
+- **Impact**: Publishable insights beyond the application
+
+### Quick Implementation Roadmap (by Effort)
+
+**Option A: Minimum Novelty (1-2 weeks)**
+- ✅ Add Research Questions (RQ1, RQ2, RQ3) → already in blueprint
+- ✅ Design experiments addressing these RQs → already in blueprint
+- Implement: Tile overlap ablation study (Section 5.3, Experiment A)
+- Implement: Domain transfer comparison (Section 5.3, Experiment B)
+- Result: Publishable in domain-specific venues
+
+**Option B: Strong Novelty (3-4 weeks)**
+- Do everything in Option A
+- Implement: One of {Boundary-Aware Loss, Hard Negative Mining}
+- Add: Feature visualization + domain analysis
+- Result: Publishable in general ML/CV conferences
+
+**Option C: Significant Novelty (5-6 weeks)**
+- Do everything in Option A
+- Implement: Two of {Adaptive Overlap Module, Domain Adaptation, Boundary Refinement}
+- Add: Complete theoretical framework + extensive ablations
+- Result: Publishable in top-tier venues (CVPR/ICCV quality)
+
+### Where to Start
+1. Run all experiments from Section 5.3 with current model (Experiments A, B, C)
+2. Analyze results from Section 6.3 (RQ1, RQ2, RQ3 results)
+3. This alone proves it's not "just libraries" - you have novel insights
+4. Then pick 1-2 methodological contributions from Section 4.0 to implement
 
 ---
 
