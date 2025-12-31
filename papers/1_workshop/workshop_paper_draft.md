@@ -40,6 +40,22 @@ Generalization across print designs poses additional challenges. A detection mod
 
 Data availability constrains model development. Labeled datasets of printing defects are scarce in the public domain, as production data is typically proprietary and annotation requires domain expertise. This limitation affects both initial model training and the development of benchmark comparisons across methods.
 
+### 1.4 Paper Contributions
+
+This paper presents a practical implementation of automated defect detection for offset printing. The principal contributions are:
+
+1. A complete end-to-end detection system based on the YOLOv9-S architecture, adapted for the printing defect domain.
+
+2. A tile-based preprocessing pipeline that enables processing of high-resolution print images within standard deep learning frameworks.
+
+3. An image reconstruction methodology that aggregates tile-level detections into full-resolution annotated output.
+
+4. Empirical evaluation on a custom offset printing defect dataset, with quantitative performance analysis.
+
+5. Documented training configuration and experimental setup to support reproducibility.
+
+The following sections detail the dataset characteristics, system architecture, experimental methodology, and results.
+
 ---
 
 ## References
@@ -52,4 +68,4 @@ Data availability constrains model development. Labeled datasets of printing def
 
 ---
 
-*Draft in progress - Sections 1.1, 1.2, 1.3 complete*
+*Draft in progress - Section 1 (Introduction) complete*
