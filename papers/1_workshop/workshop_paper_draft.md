@@ -16,6 +16,16 @@ The gap between press speeds and inspection capacity creates a sampling problem:
 
 These constraints motivate the development of automated inspection systems capable of continuous, consistent defect detection at production speeds. Computer vision approaches offer the potential for real-time analysis of every printed sheet, eliminating sampling gaps and providing objective, repeatable quality assessment.
 
+### 1.2 Industrial Context of Offset Printing
+
+Offset lithography operates through an indirect transfer mechanism. Ink is first applied to an image-bearing plate, then transferred to an intermediate rubber blanket cylinder, and finally deposited onto the printing substrate. This indirect transfer provides consistent ink coverage and reduces plate wear, enabling long production runs. Modern offset presses achieve speeds exceeding 15,000 impressions per hour for sheet-fed configurations, with web-fed rotary presses reaching substantially higher throughput [3].
+
+Multi-color printing compounds the complexity of quality control. A typical four-color (CMYK) press applies cyan, magenta, yellow, and black inks in sequence, with each color unit requiring precise registration to within fractions of a millimeter. Misregistration between color separations produces visible color fringing and blurred edges, particularly noticeable in text and fine graphic elements.
+
+Defects in offset printing fall into several categories. Ink-related defects include spots and smears caused by contamination or improper ink-water balance, as well as streaking and banding resulting from uneven ink distribution across the roller train. Registration defects manifest as misalignment between color layers or between printed content and the substrate edge. Hickeys appear as small circular voids surrounded by ink halos, typically caused by debris particles on the blanket or plate. Ghosting produces faint duplicate images displaced from the primary image, resulting from ink starvation in high-coverage areas.
+
+Quality requirements vary by application but trend toward increasingly stringent standards. Pharmaceutical packaging operates under regulatory frameworks that mandate zero-defect production with documented inspection records. Food packaging faces similar requirements, with additional constraints on ink migration and contamination. Commercial printing for brand owners demands consistent color reproduction across print runs and production sites, with tolerances defined by spectrophotometric measurement. These requirements establish the performance targets for any automated inspection system: high detection rates with minimal false positives, operating at full production speed.
+
 ---
 
 ## References
@@ -24,6 +34,8 @@ These constraints motivate the development of automated inspection systems capab
 
 [2] Smithers, "The Future of Digital vs Offset Printing to 2024," Smithers Market Reports, 2024. Available: https://www.smithers.com/services/market-reports/printing/the-future-of-digital-vs-offset-printing-to-2024
 
+[3] H. Kipphan, "Handbook of Print Media: Technologies and Production Methods," Springer, 2001.
+
 ---
 
-*Draft in progress - Section 1.1 complete*
+*Draft in progress - Sections 1.1, 1.2 complete*
