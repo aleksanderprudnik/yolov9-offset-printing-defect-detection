@@ -26,6 +26,20 @@ Defects in offset printing fall into several categories. Ink-related defects inc
 
 Quality requirements vary by application but trend toward increasingly stringent standards. Pharmaceutical packaging operates under regulatory frameworks that mandate zero-defect production with documented inspection records. Food packaging faces similar requirements, with additional constraints on ink migration and contamination. Commercial printing for brand owners demands consistent color reproduction across print runs and production sites, with tolerances defined by spectrophotometric measurement. These requirements establish the performance targets for any automated inspection system: high detection rates with minimal false positives, operating at full production speed.
 
+### 1.3 Challenges in Automated Print Inspection
+
+Automated visual inspection of printed materials presents several technical challenges that distinguish it from general object detection tasks.
+
+Resolution requirements impose computational constraints. Print defects often measure less than one millimeter in diameter, while printed sheets may span several hundred millimeters. Capturing sufficient detail to detect small defects requires high-resolution imaging, producing images with dimensions that exceed typical neural network input sizes. Processing such images directly would demand prohibitive memory and computation; downsampling to manageable dimensions risks losing the fine detail necessary for defect detection.
+
+Distinguishing defects from intended content represents a fundamental difficulty. Unlike industrial inspection of uniform surfaces, printed materials contain deliberate patterns, text, and graphics. A dark spot may be a defect or part of the design. An edge discontinuity may indicate a printing fault or the boundary of a graphic element. Detection algorithms must learn to identify anomalies within the context of varied and previously unseen print designs, rather than simply detecting deviations from a uniform background.
+
+Production integration demands real-time performance. For inline inspection, processing latency must remain below the interval between successive sheets. At 15,000 impressions per hour, each sheet passes the inspection point approximately every 240 milliseconds. The complete pipeline—image acquisition, preprocessing, inference, and result handling—must complete within this window to avoid production bottlenecks.
+
+Generalization across print designs poses additional challenges. A detection model trained on one set of printed materials may not transfer effectively to different designs, substrates, or ink formulations. Practical deployment requires either robust generalization or efficient adaptation to new production contexts.
+
+Data availability constrains model development. Labeled datasets of printing defects are scarce in the public domain, as production data is typically proprietary and annotation requires domain expertise. This limitation affects both initial model training and the development of benchmark comparisons across methods.
+
 ---
 
 ## References
@@ -38,4 +52,4 @@ Quality requirements vary by application but trend toward increasingly stringent
 
 ---
 
-*Draft in progress - Sections 1.1, 1.2 complete*
+*Draft in progress - Sections 1.1, 1.2, 1.3 complete*
