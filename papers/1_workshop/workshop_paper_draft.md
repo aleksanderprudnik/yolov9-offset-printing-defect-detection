@@ -70,6 +70,14 @@ Early approaches to automated print inspection relied on classical image process
 
 **Texture analysis** methods characterize local image patterns using filter banks such as Gabor wavelets or descriptors such as Local Binary Patterns (LBP). Anomalies appear as regions with texture statistics deviating from expected norms. While effective for detecting defects on textured surfaces in other manufacturing domains, these methods require careful parameter tuning for each printing application and may not generalize across different print designs or substrate materials.
 
+### 2.2 Machine Learning Approaches
+
+The transition from hand-crafted image processing to learned representations marked a significant shift in defect detection methodology.
+
+**Classical machine learning** pipelines combined feature extraction with trainable classifiers. Feature descriptors such as Scale-Invariant Feature Transform (SIFT), Speeded-Up Robust Features (SURF), and Histogram of Oriented Gradients (HOG) provided compact representations of local image structure [6]. These features served as inputs to classifiers including Support Vector Machines and Random Forests, which learned decision boundaries separating defective from non-defective samples. The primary limitation of this approach lies in the feature engineering burden: designing discriminative features requires domain expertise and iterative refinement, and features optimized for one defect type or printing process may not transfer to others.
+
+**Early convolutional neural network** approaches applied architectures such as AlexNet and VGG to industrial inspection tasks [7]. These networks learn hierarchical feature representations directly from image data, eliminating manual feature design. Initial applications to defect detection typically framed the problem as patch-based binary classification: images were divided into fixed-size patches, and each patch was classified as defective or non-defective. While this approach demonstrated improved accuracy over hand-crafted features, it provided only classification output without precise defect localization, and the patch-based formulation introduced boundary artifacts and computational redundancy.
+
 ---
 
 ## References
@@ -84,6 +92,10 @@ Early approaches to automated print inspection relied on classical image process
 
 [5] J. Canny, "A Computational Approach to Edge Detection," IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 8, no. 6, pp. 679-698, 1986.
 
+[6] N. Dalal and B. Triggs, "Histograms of Oriented Gradients for Human Detection," CVPR, pp. 886-893, 2005.
+
+[7] A. Krizhevsky, I. Sutskever, and G. E. Hinton, "ImageNet Classification with Deep Convolutional Neural Networks," NeurIPS, pp. 1097-1105, 2012.
+
 ---
 
-*Draft in progress - Sections 1, 2.1 complete*
+*Draft in progress - Sections 1, 2.1, 2.2 complete*
