@@ -90,6 +90,16 @@ Object detection architectures provide both classification and localization in a
 
 **YOLOv9** represents the current state of the art, introducing two key innovations [10]. The Generalized Efficient Layer Aggregation Network (GELAN) backbone improves feature extraction through flexible computational block design. Programmable Gradient Information (PGI) addresses information loss during deep network training by providing auxiliary supervision paths. These contributions yield improved accuracy-efficiency trade-offs compared to prior YOLO versions. This work adopts YOLOv9-S (Small variant) as the detection backbone.
 
+### 2.4 High-Resolution Image Processing
+
+Processing high-resolution images with neural networks designed for fixed input dimensions requires strategies to preserve detail while managing computational constraints.
+
+**Sliding window approaches** scan a fixed-size detection window across the image at multiple positions and scales. Each window position is processed independently through the detector, and overlapping detections are merged through non-maximum suppression. While straightforward to implement, sliding window methods incur substantial computational overhead: a high-resolution image may require hundreds or thousands of window evaluations, with significant redundant computation in overlapping regions.
+
+**Tile-based processing** divides the input image into a grid of non-overlapping or overlapping tiles, processes each tile independently, and aggregates results into a unified output. This approach bounds memory consumption to that required for a single tile and enables parallel processing across tiles. The primary challenge lies in handling objects that span tile boundaries: without overlap, such objects may be truncated and missed by detection.
+
+**SAHI (Slicing Aided Hyper Inference)** provides a systematic framework for tile-based object detection [11]. SAHI generates tiles with configurable size and overlap ratio, runs inference on each tile, maps detections back to original image coordinates, and merges overlapping predictions. The overlap between adjacent tiles ensures that objects near boundaries appear completely within at least one tile. SAHI has demonstrated particular effectiveness for small object detection, where objects occupy only a small fraction of high-resolution images and would be poorly resolved after downsampling to standard network input sizes. This work employs SAHI for tile generation in the preprocessing pipeline.
+
 ---
 
 ## References
@@ -114,6 +124,8 @@ Object detection architectures provide both classification and localization in a
 
 [10] C.-Y. Wang, I.-H. Yeh, and H.-Y. M. Liao, "YOLOv9: Learning What You Want to Learn Using Programmable Gradient Information," arXiv preprint arXiv:2402.13616, 2024.
 
+[11] F. C. Akyon, S. O. Altinuc, and A. Temizel, "Slicing Aided Hyper Inference and Fine-Tuning for Small Object Detection," IEEE ICIP, pp. 966-970, 2022.
+
 ---
 
-*Draft in progress - Sections 1, 2.1, 2.2, 2.3 complete*
+*Draft in progress - Sections 1, 2 complete*
