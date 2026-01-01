@@ -78,6 +78,18 @@ The transition from hand-crafted image processing to learned representations mar
 
 **Early convolutional neural network** approaches applied architectures such as AlexNet and VGG to industrial inspection tasks [7]. These networks learn hierarchical feature representations directly from image data, eliminating manual feature design. Initial applications to defect detection typically framed the problem as patch-based binary classification: images were divided into fixed-size patches, and each patch was classified as defective or non-defective. While this approach demonstrated improved accuracy over hand-crafted features, it provided only classification output without precise defect localization, and the patch-based formulation introduced boundary artifacts and computational redundancy.
 
+### 2.3 Modern Object Detection Architectures
+
+Object detection architectures provide both classification and localization in a single inference pass, making them suitable for defect detection tasks requiring spatial information.
+
+**Two-stage detectors** separate region proposal from classification. The R-CNN family—R-CNN, Fast R-CNN, and Faster R-CNN—first generates candidate bounding boxes, then classifies each region independently [8]. Faster R-CNN introduced learnable Region Proposal Networks, achieving strong accuracy on benchmark datasets. However, the two-stage pipeline incurs computational overhead that limits real-time applicability in high-throughput industrial settings.
+
+**Single-stage detectors** perform localization and classification simultaneously across the image. The YOLO (You Only Look Once) architecture treats detection as a regression problem, predicting bounding boxes and class probabilities directly from image features [9]. SSD (Single Shot Detector) introduced multi-scale feature maps for detecting objects at different sizes, while RetinaNet addressed class imbalance through focal loss. Single-stage detectors achieve inference speeds compatible with real-time requirements while maintaining competitive accuracy.
+
+**The YOLO architecture** has evolved through multiple generations. YOLOv1 through YOLOv3 established the foundational single-stage paradigm with progressive improvements to accuracy and multi-scale detection. YOLOv4 and YOLOv5 introduced enhanced training strategies including mosaic augmentation, auto-anchor learning, and improved loss functions. YOLOv7 contributed the Extended Efficient Layer Aggregation Network (E-ELAN) for improved gradient flow. YOLOv8 unified detection, segmentation, and classification within a single framework.
+
+**YOLOv9** represents the current state of the art, introducing two key innovations [10]. The Generalized Efficient Layer Aggregation Network (GELAN) backbone improves feature extraction through flexible computational block design. Programmable Gradient Information (PGI) addresses information loss during deep network training by providing auxiliary supervision paths. These contributions yield improved accuracy-efficiency trade-offs compared to prior YOLO versions. This work adopts YOLOv9-S (Small variant) as the detection backbone.
+
 ---
 
 ## References
@@ -96,6 +108,12 @@ The transition from hand-crafted image processing to learned representations mar
 
 [7] A. Krizhevsky, I. Sutskever, and G. E. Hinton, "ImageNet Classification with Deep Convolutional Neural Networks," NeurIPS, pp. 1097-1105, 2012.
 
+[8] S. Ren, K. He, R. Girshick, and J. Sun, "Faster R-CNN: Towards Real-Time Object Detection with Region Proposal Networks," NeurIPS, pp. 91-99, 2015.
+
+[9] J. Redmon, S. Divvala, R. Girshick, and A. Farhadi, "You Only Look Once: Unified, Real-Time Object Detection," CVPR, pp. 779-788, 2016.
+
+[10] C.-Y. Wang, I.-H. Yeh, and H.-Y. M. Liao, "YOLOv9: Learning What You Want to Learn Using Programmable Gradient Information," arXiv preprint arXiv:2402.13616, 2024.
+
 ---
 
-*Draft in progress - Sections 1, 2.1, 2.2 complete*
+*Draft in progress - Sections 1, 2.1, 2.2, 2.3 complete*
