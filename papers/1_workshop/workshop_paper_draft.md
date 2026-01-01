@@ -56,6 +56,20 @@ This paper presents a practical implementation of automated defect detection for
 
 The following sections detail the dataset characteristics, system architecture, experimental methodology, and results.
 
+## 2. Related Work
+
+### 2.1 Traditional Print Defect Detection Methods
+
+Early approaches to automated print inspection relied on classical image processing techniques. These methods remain relevant as baselines and are sometimes combined with modern deep learning approaches.
+
+**Threshold-based segmentation** represents the simplest class of defect detection methods. Global thresholding separates foreground defects from background based on a fixed intensity value, while adaptive thresholding computes local thresholds to accommodate intensity gradients across the image [4]. These methods work adequately on uniform backgrounds but struggle with printed materials, where ink density varies by design and lighting conditions introduce additional intensity variation.
+
+**Edge detection** using operators such as Sobel and Canny identifies discontinuities in image intensity that may correspond to defect boundaries [5]. The fundamental limitation for print inspection is that printed content contains numerous intentional edges—text characters, graphic borders, halftone patterns—that generate edge responses indistinguishable from defect boundaries without higher-level semantic understanding.
+
+**Template matching** compares each printed sample against a reference "golden" image pixel by pixel or region by region. Difference maps highlight deviations that may indicate defects. This approach requires precise spatial registration between test and reference images; even sub-pixel misalignment produces false difference signals. Template methods also assume a fixed print design, requiring a new reference for each product changeover.
+
+**Texture analysis** methods characterize local image patterns using filter banks such as Gabor wavelets or descriptors such as Local Binary Patterns (LBP). Anomalies appear as regions with texture statistics deviating from expected norms. While effective for detecting defects on textured surfaces in other manufacturing domains, these methods require careful parameter tuning for each printing application and may not generalize across different print designs or substrate materials.
+
 ---
 
 ## References
@@ -66,6 +80,10 @@ The following sections detail the dataset characteristics, system architecture, 
 
 [3] H. Kipphan, "Handbook of Print Media: Technologies and Production Methods," Springer, 2001.
 
+[4] N. Otsu, "A Threshold Selection Method from Gray-Level Histograms," IEEE Transactions on Systems, Man, and Cybernetics, vol. 9, no. 1, pp. 62-66, 1979.
+
+[5] J. Canny, "A Computational Approach to Edge Detection," IEEE Transactions on Pattern Analysis and Machine Intelligence, vol. 8, no. 6, pp. 679-698, 1986.
+
 ---
 
-*Draft in progress - Section 1 (Introduction) complete*
+*Draft in progress - Sections 1, 2.1 complete*
