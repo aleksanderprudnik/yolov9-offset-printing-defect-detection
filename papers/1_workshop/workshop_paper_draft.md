@@ -100,35 +100,6 @@ Processing high-resolution images with neural networks designed for fixed input 
 
 **SAHI (Slicing Aided Hyper Inference)** provides a systematic framework for tile-based object detection [11]. SAHI generates tiles with configurable size and overlap ratio, runs inference on each tile, maps detections back to original image coordinates, and merges overlapping predictions. The overlap between adjacent tiles ensures that objects near boundaries appear completely within at least one tile. SAHI has demonstrated particular effectiveness for small object detection, where objects occupy only a small fraction of high-resolution images and would be poorly resolved after downsampling to standard network input sizes. This work employs SAHI for tile generation in the preprocessing pipeline.
 
-## 3. Dataset and Preprocessing
-
-### 3.1 Dataset Description
-
-#### 3.1.1 Data Source
-
-The dataset comprises images captured from an operational offset printing production line using a custom quality control system. The acquisition infrastructure consists of a multi-threaded application orchestrating synchronized image capture from four Basler acA1440-73gm industrial cameras (1440×1080 resolution, monochrome, GigE interface) arranged to cover adjacent quadrants of the printed sheet. Camera synchronization with the printing cylinder is achieved through a hardware trigger system: a Hall-effect sensor mounted on the press cylinder generates trigger pulses, which are processed by a dedicated controller that calculates instantaneous press speed from inter-pulse intervals and coordinates acquisition timing across all camera units.
-
-Each camera captures its designated region of interest with configurable margins to accommodate mechanical variability in sheet positioning (approximately ±1 mm). The acquisition system operates at production speed, capturing every printed sheet as it passes the inspection station. Images are stored in lossless format to preserve defect detail for subsequent annotation.
-
-The original quality control system employed a template-matching approach for defect detection. Each camera maintained a grayscale reference template, and incoming frames were compared using the Structural Similarity Index (SSIM). Difference maps underwent Otsu thresholding followed by morphological filtering (erosion and dilation with 7×7 kernels, three iterations each) to suppress noise. Candidate defects were identified through contour analysis with a minimum area threshold of 250 pixels, and a temporal consistency filter required defects to persist across consecutive frames to distinguish genuine anomalies from transient artifacts. However, this approach exhibited fundamental limitations: the pixel-wise difference metrics produced false positives in the presence of mechanical sheet positioning variations, as such perturbations generated SSIM degradation patterns geometrically similar to actual sub-centimeter defects. These limitations motivated the transition to a learning-based detection approach.
-
-#### 3.1.2 Class Definition
-
-The dataset employs a single class label: "defect." This binary formulation (defect present/absent) simplifies the annotation task and focuses the detection objective on localization rather than fine-grained defect categorization. The single-class approach is appropriate for the current application, where the primary requirement is to flag any quality deviation for operator review. Extension to multi-class defect taxonomy (distinguishing ink spots, streaks, registration errors, etc.) represents a direction for future work contingent on expanded annotation effort.
-
-#### 3.1.3 Dataset Statistics
-
-| Property | Value |
-|----------|-------|
-| Number of classes | 1 ("defect") |
-| Training images | Located in `data/images/train` |
-| Validation images | Located in `data/images/val` |
-| Test images | Located in `data/images/original_test_data` |
-| Annotation format | YOLO format (class, x_center, y_center, width, height) |
-| Supported image formats | BMP, JPG, TIF |
-
-(Exact image counts and defect instance statistics to be added from dataset analysis.)
-
 ---
 
 ## References
@@ -157,4 +128,4 @@ The dataset employs a single class label: "defect." This binary formulation (def
 
 ---
 
-*Draft in progress - Sections 1, 2, 3.1 complete*
+*Draft in progress - Sections 1, 2 complete*
